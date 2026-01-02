@@ -1,0 +1,23 @@
+{
+  "name": "matchup",
+  "version": "1.0.0",
+  "description": "MatchUp — a Tinder-like full-stack web application built using the MERN stack, implementing slide functionality, match logic, user profiles, and secure authentication.",
+  "homepage": "https://github.com/Manoj-Kumar-Rout/MatchUP#readme",
+  "bugs": {
+    "url": "https://github.com/Manoj-Kumar-Rout/MatchUP/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Manoj-Kumar-Rout/MatchUP.git"
+  },
+  "license": "ISC",
+  "author": "Manoj Kumar Rout",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
