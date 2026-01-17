@@ -1,26 +1,19 @@
 const express = require("express");
-const ConnectDB = require("./utils/DBconnection");
-const User = require("./utils/DBschema");
+const connectDB = require("./config/DBconnection");
+const userRouter = require("./Routers/Userrouter");
+const cookieParser = require("cookie-parser");
+const ConnectionRouter = require("./Routers/ConnectionRouter");
 
 const app = express();
 const port = 5000;
 
 app.use(express.json());
+app.use(cookieParser());
 
-app.post("/signup", async (req, res) => {
-  try {
-    const user = new User(req.body);
-    await user.save();
-    res.status(201).json({ message: "User saved successfully" });
-  } catch (error) {
-    res.status(400).json({
-      message: "Error saving user",
-      error: error.message,
-    });
-  }
-});
+app.use("/user", userRouter);
+app.use("/connection", ConnectionRouter);
 
-ConnectDB()
+connectDB()
   .then(() => {
     app.listen(port, () => {
       console.log(`Server running on port ${port}`);
