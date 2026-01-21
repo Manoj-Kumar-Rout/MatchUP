@@ -11,48 +11,39 @@ connectionRouter.post("/send/:status/:userID", AuthUser, async (req, res) => {
     if (!loggedInUser) {
       return res.status(401).json({ message: "Please login" });
     }
-
     const fromUserId = loggedInUser._id;
     const toUserId = req.params.userID;
     const status = req.params.status;
-
     const allowedStatus = ["Interested", "Ignored"];
     if (!allowedStatus.includes(status)) {
       return res.status(400).json({ message: "Invalid status" });
     }
-
     if (fromUserId.equals(toUserId)) {
       return res
         .status(400)
         .json({ message: "You cannot send request to yourself" });
     }
-
     const user = await User.findById(toUserId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-
     const existingConnection = await ConnectionRequest.findOne({
       $or: [
         { fromUserId, toUserId },
         { fromUserId: toUserId, toUserId: fromUserId },
       ],
     });
-
     if (existingConnection) {
       return res.status(409).json({
         message: "Connection request already exists",
       });
     }
-
     const newRequest = new ConnectionRequest({
       fromUserId,
       toUserId,
       status,
     });
-
     await newRequest.save();
-
     const populatedRequest = await ConnectionRequest.findById(newRequest._id)
       .populate({
         path: "fromUserId",
@@ -62,7 +53,6 @@ connectionRouter.post("/send/:status/:userID", AuthUser, async (req, res) => {
         path: "toUserId",
         select: "firstName lastName photoUrl",
       });
-
     return res.status(201).json({
       message: "Connection request sent successfully",
       data: populatedRequest,
