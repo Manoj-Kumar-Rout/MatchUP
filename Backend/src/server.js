@@ -5,12 +5,19 @@ const cookieParser = require("cookie-parser");
 const ConnectionRouter = require("./Routers/ConnectionRouter");
 const ProfileConnection = require("./Routers/ProfileConnection");
 const feedRouter = require("./Routers/Feed");
+const cors = require("cors");
 
 const app = express();
 const port = 5000;
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  }),
+);
 
 app.use("/user", userRouter);
 app.use("/connection", ConnectionRouter);

@@ -11,8 +11,17 @@ const { validatePassword } = require("../Utils/Validation");
 userRouter.post("/signup", async (req, res) => {
   try {
     validateSignup(req);
-    const { firstName, lastName, email, password, age, gender, photoUrl, Bio } =
-      req.body;
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      age,
+      gender,
+      photoUrl,
+      Bio,
+      location,
+    } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = new User({
@@ -24,6 +33,7 @@ userRouter.post("/signup", async (req, res) => {
       gender,
       photoUrl,
       Bio,
+      location,
     });
     await user.save();
     res.status(201).json({ message: "User saved successfully" });
@@ -54,15 +64,10 @@ userRouter.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
     const token = await user.getJWT();
-    console.log(token);
     res.cookie("token", token);
     res.status(200).json({
       message: "Login successful",
-      user: {
-        id: user._id,
-        email: user.email,
-        firstName: user.firstName,
-      },
+      user: user,
     });
   } catch (err) {
     res.status(500).json({
@@ -107,6 +112,7 @@ userRouter.patch("/editProfile", AuthUser, async (req, res) => {
       "age",
       "gender",
       "photoUrl",
+      "location",
       "Bio",
     ];
     const updates = Object.keys(req.body);
@@ -133,7 +139,6 @@ userRouter.patch("/editProfile", AuthUser, async (req, res) => {
 userRouter.patch("/editPassword", AuthUser, async (req, res) => {
   try {
     const loggedinUser = req.user;
-    console.log(loggedinUser);
     if (!loggedinUser) {
       return res.status(401).json({ message: "Please login" });
     }

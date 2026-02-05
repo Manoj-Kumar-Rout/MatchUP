@@ -5,6 +5,7 @@ const User = require("../Models/User");
 const AuthUser = require("../Middleware/Authuser");
 
 feedRouter.get("/feed", AuthUser, async (req, res) => {
+  const limit = parseInt(req.query.limit) || 1;
   try {
     const loggedInUser = req.user;
     if (!loggedInUser) {
@@ -24,7 +25,9 @@ feedRouter.get("/feed", AuthUser, async (req, res) => {
         $nin: hiddenUserArray,
         $ne: loggedInUser._id,
       },
-    });
+    })
+      .select("_id firstName lastName age gender photoUrl Bio location")
+      .limit(limit);
     res.status(200).json({
       message: "Feed fetched successfully",
       count: feedUsers.length,

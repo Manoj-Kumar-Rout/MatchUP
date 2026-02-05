@@ -1,8 +1,16 @@
 const validator = require("validator");
 
 const validateSignup = (req) => {
-  const { firstName, lastName, email, password, age, gender, photoUrl } =
-    req.body;
+  const {
+    firstName,
+    lastName,
+    email,
+    password,
+    age,
+    gender,
+    photoUrl,
+    location,
+  } = req.body;
 
   if (!firstName || !lastName) {
     throw new Error("First name and last name are required");
@@ -22,7 +30,7 @@ const validateSignup = (req) => {
 
   if (!validator.isStrongPassword(password)) {
     throw new Error(
-      "Password must contain uppercase, lowercase, number and special character"
+      "Password must contain uppercase, lowercase, number and special character",
     );
   }
 
@@ -37,22 +45,37 @@ const validateSignup = (req) => {
   if (photoUrl && !validator.isURL(photoUrl)) {
     throw new Error("Invalid photo URL");
   }
+  if (location && location.length > 20) {
+    throw new Error("Location must be within 20 characters");
+  }
 };
 
 const validateUpdateProfile = (req) => {
-  const { age, gender, photoUrl } = req.body;
+  const { age, gender, photoUrl, location } = req.body;
 
-  if (age && (age < 18 || age > 60)) {
-    throw new Error("Age must be between 18 and 60");
+  if (age !== undefined) {
+    const parsedAge = Number(age);
+    if (isNaN(parsedAge) || parsedAge < 18 || parsedAge > 60) {
+      throw new Error("Age must be a number between 18 and 60");
+    }
   }
 
-  if (gender && !["male", "female", "other"].includes(gender.toLowerCase())) {
-    throw new Error("Invalid gender");
+  if (gender) {
+    const allowedGenders = ["male", "female", "other"];
+    if (!allowedGenders.includes(gender.toLowerCase())) {
+      throw new Error("Invalid gender");
+    }
   }
 
   if (photoUrl && !validator.isURL(photoUrl)) {
     throw new Error("Invalid photo URL");
   }
+
+  if (location && location.length > 20) {
+    throw new Error("Location must be within 20 characters");
+  }
+
+  return true;
 };
 
 const validatePassword = (req) => {
@@ -65,7 +88,7 @@ const validatePassword = (req) => {
   }
   if (!validator.isStrongPassword(newPassword)) {
     throw new Error(
-      "New Password must contain uppercase, lowercase, number and special character"
+      "New Password must contain uppercase, lowercase, number and special character",
     );
   }
 };

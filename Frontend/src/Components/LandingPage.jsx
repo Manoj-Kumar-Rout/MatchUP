@@ -1,5 +1,6 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useSelector } from "react-redux";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
@@ -12,6 +13,12 @@ const fadeIn = {
 };
 
 const LandingPage = () => {
+  const navigate = useNavigate();
+
+  const { user, loading } = useSelector((store) => store.user);
+
+  if (loading) return null;
+
   return (
     <div className="w-full bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-600 text-white">
       <section className="flex flex-col-reverse lg:flex-row items-center justify-between px-4 sm:px-8 lg:px-16 py-12 lg:py-24 gap-12">
@@ -25,20 +32,20 @@ const LandingPage = () => {
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight mb-4">
             Find Your <br className="hidden sm:block" /> Perfect Match
           </h2>
+
           <p className="text-base sm:text-lg text-white/90 mb-8">
             Connect, chat, and meet people who truly match your vibe.
           </p>
 
           <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4">
-            <Link to="/login">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-6 py-3 rounded-full bg-pink-500 hover:bg-pink-600 font-semibold"
-              >
-                Get Started
-              </motion.button>
-            </Link>
+            <motion.button
+              onClick={() => (user ? navigate("/feed") : navigate("/login"))}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-6 py-3 rounded-full bg-pink-500 hover:bg-pink-600 font-semibold"
+            >
+              Get Started
+            </motion.button>
           </div>
         </motion.div>
 

@@ -57,8 +57,12 @@ const userSchema = new mongoose.Schema(
       maxlength: [300, "Bio cannot exceed 300 characters"],
       trim: true,
     },
+    location: {
+      type: String,
+      trim: true,
+    },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 userSchema.methods.getJWT = async function () {
   return await JWT.sign({ userId: this._id }, "Likun@123");

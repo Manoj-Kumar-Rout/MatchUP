@@ -5,6 +5,11 @@ import Login from "./Components/Login";
 import Signup from "./Components/Signup.Jsx";
 import { Provider } from "react-redux";
 import appStore from "./Redux/Appstore";
+import Feed from "./Components/Feed";
+import Profile from "./Components/Profile";
+import Connections from "./Components/Connection";
+import UserConnection from "./Components/UserConnections";
+import ConnectionRequest from "./Components/ConnectionRequest";
 function App() {
   return (
     <Provider store={appStore}>
@@ -13,7 +18,12 @@ function App() {
           <Route path="/" element={<Body />}>
             <Route index element={<LandingPage />} />
             <Route path="/login" element={<Login />} />
-            <Route path="signup" element={<Signup />}></Route>
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/feed" element={<Feed />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/connections" element={<Connections />} />
+            <Route path="/userconnections" element={<UserConnection />} />
+            <Route path="/requests" element={<ConnectionRequest />} />
           </Route>
         </Routes>
       </BrowserRouter>
